@@ -31,6 +31,4 @@ psql-terminal:
 db-up:
 	docker-compose up -d db
 
-db-create:
-	rake db:create
 
