@@ -1,0 +1,20 @@
+{
+  "name": "YNAB Sync",
+  "description": "Tool for syncing transactions from banks to YNAB",
+  "repository": "https://github.com/larsar/ynab-sync",
+  "keywords": ["rails", "ynab"],
+  "success_url": "/users/sign_up",
+  "addons": ["heroku-postgresql:hobby-dev"],
+  "env": {
+    "RAILS_ENV": "production"
+  },
+  "scripts": {
+    "postdeploy": "bundle exec rake db:migrate"
+  },
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "free"
+    }
+  },
+}
