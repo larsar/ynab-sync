@@ -6,7 +6,7 @@ Rails.application.routes.draw do
 
     #match 'services/:type/new', to: 'services#new', :via => [:get], as: 'new_service'
 
-    resources :services, only: [:index]  do
+    resources :services do
       #resources :transactions, only: [:index]
     end
 
