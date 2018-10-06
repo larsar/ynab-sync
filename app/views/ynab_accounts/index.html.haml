@@ -1,0 +1,19 @@
+- if @ynab_accounts.count > 0
+  .row.my-4
+    .col-sm-6.offset-sm-1
+      .table-responsive
+        %table.table.table-striped
+          %thead.thead-inverse
+            %tr
+              %th
+                Name
+              %th
+                Budget
+          %tbody
+            - @ynab_accounts.each do |ynab_account|
+              %tr
+                %td
+                  = ynab_account.name
+                %td
+                  = ynab_account.budget.name
+

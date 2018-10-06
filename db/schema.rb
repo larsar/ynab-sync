@@ -10,11 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_04_175313) do
+ActiveRecord::Schema.define(version: 2018_10_06_192411) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
+
+  create_table "budgets", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name"
+    t.uuid "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_budgets_on_user_id"
+  end
 
   create_table "services", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "type"
@@ -36,5 +44,18 @@ ActiveRecord::Schema.define(version: 2018_10_04_175313) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
+  create_table "ynab_accounts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name"
+    t.uuid "budget_id"
+    t.uuid "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["budget_id"], name: "index_ynab_accounts_on_budget_id"
+    t.index ["user_id"], name: "index_ynab_accounts_on_user_id"
+  end
+
+  add_foreign_key "budgets", "users"
   add_foreign_key "services", "users"
+  add_foreign_key "ynab_accounts", "budgets"
+  add_foreign_key "ynab_accounts", "users"
 end

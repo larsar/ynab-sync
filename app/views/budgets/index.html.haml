@@ -1,0 +1,17 @@
+= link_to 'Sync budgets', budgets_sync_path, method: :post
+
+- if @budgets.count > 0
+  .row.my-4
+    .col-sm-6.offset-sm-1
+      .table-responsive
+        %table.table.table-striped
+          %thead.thead-inverse
+            %tr
+              %th
+                Name
+          %tbody
+            - @budgets.each do |budget|
+              %tr
+                %td
+                  = budget.name
+

@@ -14,6 +14,10 @@ Rails.application.routes.draw do
     end
 
     resources :ynab_services, :controller => 'services', type: Service::TYPE_YNAB
+    resources :budgets
+    post 'budgets/sync', to: 'budgets#sync'
+    resources :ynab_accounts
+
 
   end
 

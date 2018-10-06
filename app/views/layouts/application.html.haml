@@ -37,6 +37,10 @@
         #sidebar.col-md-3.col-lg-2.sidebar-offcanvas.bg-light.pl-0{:role => "navigation"}
           %ul.nav.flex-column.sticky-top.pl-0.pt-5.mt-3
             %li.nav-item
+              = link_to 'Budgets', budgets_path, {class: 'nav-link'}
+            %li.nav-item
+              = link_to 'YNAB Accounts', ynab_accounts_path, {class: 'nav-link'}
+            %li.nav-item
               = link_to 'Services', services_path, {class: 'nav-link'}
             %li.nav-item
               %a.nav-link{:href => "#"} Transactions
