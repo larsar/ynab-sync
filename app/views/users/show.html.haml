@@ -1,4 +1,9 @@
 Email:
 = current_user.email
 %br
+YNAB Personal Access Token:
+= current_user.ynab_access_token
+%br
 = link_to 'Change password', edit_user_registration_path
+%br
+= link_to 'Change YNAB Token', ynab_path

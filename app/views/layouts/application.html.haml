@@ -28,8 +28,7 @@
         %ul.navbar-nav.ml-auto
           - if user_signed_in?
             %li.nav-item
-              %a.nav-link{:href => "#"}
-                = current_user.email
+              = link_to current_user.email, edit_user_registration_path(current_user), {class: 'nav-link'}
             %li.nav-item
               = link_to destroy_user_session_path, {method: 'delete', class: 'nav-link'} do
                 Logout
