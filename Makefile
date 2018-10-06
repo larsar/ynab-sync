@@ -18,17 +18,23 @@ stop:
 restart:
 	docker-compose restart
 
+build:
+	docker-compose build
+
 logs:
 	docker-compose logs -f
 
 psql:
 	docker-compose run --rm db psql -h db -U postgres development
 
-psql-terminal:
-	export STAGE=test && \
+bash-web:
+	docker-compose exec web bash
+
+bash-db:
 	docker-compose exec db bash
 
-db-up:
-	docker-compose up -d db
+migrate:
+	rake db:migrate
+
 
 

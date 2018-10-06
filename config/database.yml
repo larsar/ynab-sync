@@ -8,6 +8,3 @@ development: &default
   template: template0
   pool: 5
 
-test:
-  <<: *default
-  database: test
