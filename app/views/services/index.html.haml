@@ -1,4 +1,4 @@
-= link_to 'Register YNAB', new_ynab_service_path
+= link_to 'Add Sbanken', sbanken_new_path, {class: 'btn btn-secondary btn-sm'}
 
 - if @services.count > 0
   .row.my-4
@@ -16,7 +16,7 @@
             - @services.each do |service|
               %tr
                 %td
-                  = service.type_display
+                  = service.type
                 %td
                   = service.name
                 %td

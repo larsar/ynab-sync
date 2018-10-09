@@ -1,9 +1,29 @@
-Email:
-= current_user.email
-%br
-YNAB Personal Access Token:
-= current_user.ynab_access_token
-%br
-= link_to 'Change password', edit_user_registration_path
-%br
-= link_to 'Change YNAB Token', ynab_path
+.row
+  .col-sm-5.offset-sm-1
+    .card.mb-3
+      .card-header
+        YNAB Settings
+      .card-body
+        %p.card-text
+          A
+          = link_to 'personal access token', 'https://api.youneedabudget.com/#authentication'
+          is required to communicate with YNAB.
+          %br
+          %br
+          - if current_user.ynab_access_token.blank?
+            = link_to 'Set Token', ynab_token_path, {class: 'btn btn-secondary btn-sm'}
+          - else
+            = link_to 'Change Token', ynab_token_path, {class: 'btn btn-secondary btn-sm'}
+
+  .col-sm-5
+    .card.mb-3
+      .card-header
+        Login info
+      .card-body
+        %p.card-text
+          Your username is:
+          = current_user.email
+          %br
+          %br
+          = link_to 'Edit username and/or password', edit_user_registration_path, {class: 'btn btn-secondary btn-sm'}
+

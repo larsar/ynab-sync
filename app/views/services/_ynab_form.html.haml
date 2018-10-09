@@ -1,9 +1,0 @@
-= simple_form_for @service do |f|
-  .form-group.row
-    .col-sm-6.offset-sm-1
-      = f.input :name, {label: 'Service Name', class: 'form-control', required: true, :type => "text"}
-  .form-group.row
-    .col-sm-6.offset-sm-1
-      = f.input :api_key, {label: 'Personal Access Token', required: true}
-      %button.btn.btn-primary{:type => "submit"} Register
-      %button.btn.btn-outline-secondary{:type => "reset"} Cancel

@@ -22,13 +22,15 @@
         %span.navbar-toggler-icon
       #collapsingNavbar.navbar-collapse.collapse
         %ul.navbar-nav
-          %li.nav-item.active
+          %li.nav-item
             = link_to root_path, {class: 'nav-link'} do
               Home
+          %li.nav-item
+            = link_to 'Setup', setup_path, {class: 'nav-link'}
         %ul.navbar-nav.ml-auto
           - if user_signed_in?
             %li.nav-item
-              = link_to current_user.email, edit_user_registration_path(current_user), {class: 'nav-link'}
+              = link_to current_user.email, setup_path, {class: 'nav-link'}
             %li.nav-item
               = link_to destroy_user_session_path, {method: 'delete', class: 'nav-link'} do
                 Logout
@@ -37,12 +39,19 @@
         #sidebar.col-md-3.col-lg-2.sidebar-offcanvas.bg-light.pl-0{:role => "navigation"}
           %ul.nav.flex-column.sticky-top.pl-0.pt-5.mt-3
             %li.nav-item
-              = link_to 'Budgets', budgets_path, {class: 'nav-link'}
+              = link_to 'YNAB Budgets', budgets_path, {class: 'nav-link'}
             %li.nav-item
               = link_to 'YNAB Accounts', ynab_accounts_path, {class: 'nav-link'}
             %li.nav-item
-              = link_to 'Services', services_path, {class: 'nav-link'}
+              = link_to 'Bank Connections', services_path, {class: 'nav-link'}
+            %li.nav-item
+              = link_to 'Bank Accounts', services_path, {class: 'nav-link'}
             %li.nav-item
               %a.nav-link{:href => "#"} Transactions
         .col.main.pt-5.mt-3
+
+          - flash.each do |key, value|
+            %div{:class => "#{flash_class(key)}"}
+              = value
+
           = yield

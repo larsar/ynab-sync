@@ -9,7 +9,7 @@ class UsersController < ApplicationController
     current_user.ynab_access_token = params[:user].permit(:ynab_access_token)[:ynab_access_token]
     current_user.save!
     
-    redirect_to profile_path
+    redirect_to setup_path
   end
 
 end

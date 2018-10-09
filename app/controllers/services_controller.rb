@@ -7,19 +7,19 @@ class ServicesController < ApplicationController
 
   def new
     case params[:type]
-    when Service::TYPE_YNAB
-      @service = YnabService.new
-      @service.name = 'My YNAB'
+    when Service::SBANKEN
+      @service = Sbanken.new
+      @service.name = 'My Sbanken'
     else
       raise 'Invalid type'
     end
   end
 
   def create
-    case params[:type]
-    when Service::TYPE_YNAB
-      par = params[:ynab_service].permit(:name, :api_key)
-      @service = YnabService.new(par)
+    case params[:sbanken][:type]
+    when Service::SBANKEN
+      par = params[:sbanken].permit(:name, :nin, :client_id, :secret)
+      @service = Sbanken.new(par)
     else
       raise 'Invalid type'
     end

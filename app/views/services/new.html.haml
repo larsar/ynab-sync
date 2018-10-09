@@ -1,3 +1,4 @@
+= @service.type
 - case @service.type
-- when YnabService::TYPE
-  = render partial: 'ynab_form'
+- when Sbanken.name
+  = render partial: 'sbanken_form'
