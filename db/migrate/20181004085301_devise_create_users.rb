@@ -8,7 +8,7 @@ class DeviseCreateUsers < ActiveRecord::Migration[5.2]
       t.string :encrypted_password, null: false, default: ""
       t.datetime :remember_created_at
       t.string :ynab_access_token
-
+      t.jsonb :properties
       t.timestamps null: false
     end
 

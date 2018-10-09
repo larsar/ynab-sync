@@ -1,0 +1,2 @@
+class BankTransaction < Item
+end

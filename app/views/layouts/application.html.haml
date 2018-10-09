@@ -11,7 +11,6 @@
     %meta{:content => "A Bootstrap 4 admin dashboard theme that will get you started. The sidebar toggles off-canvas on smaller screens. This example also include large stat blocks, modal and cards. The top navbar is controlled by a separate hamburger toggle button.", :name => "description"}/
     %meta{:content => "width=device-width, initial-scale=1.0", :name => "viewport"}/
     %meta{:content => "Codeply", :name => "generator"}/
-    %link{:href => "css/theme.css", :rel => "stylesheet"}/
   %body
     %nav.navbar.fixed-top.navbar-expand-md.navbar-dark.bg-primary.mb-3
       .flex-row.d-flex
@@ -21,14 +20,11 @@
       %button.navbar-toggler{"data-target" => "#collapsingNavbar", "data-toggle" => "collapse", :type => "button"}
         %span.navbar-toggler-icon
       #collapsingNavbar.navbar-collapse.collapse
-        %ul.navbar-nav
-          %li.nav-item
-            = link_to root_path, {class: 'nav-link'} do
-              Home
-          %li.nav-item
-            = link_to 'Setup', setup_path, {class: 'nav-link'}
-        %ul.navbar-nav.ml-auto
-          - if user_signed_in?
+        - if user_signed_in?
+          %ul.navbar-nav
+            %li.nav-item
+              = link_to 'Setup', setup_path, {class: 'nav-link'}
+          %ul.navbar-nav.ml-auto
             %li.nav-item
               = link_to current_user.email, setup_path, {class: 'nav-link'}
             %li.nav-item
@@ -37,17 +33,13 @@
     #main.container-fluid
       .row.row-offcanvas.row-offcanvas-left
         #sidebar.col-md-3.col-lg-2.sidebar-offcanvas.bg-light.pl-0{:role => "navigation"}
-          %ul.nav.flex-column.sticky-top.pl-0.pt-5.mt-3
-            %li.nav-item
-              = link_to 'YNAB Budgets', budgets_path, {class: 'nav-link'}
-            %li.nav-item
-              = link_to 'YNAB Accounts', ynab_accounts_path, {class: 'nav-link'}
-            %li.nav-item
-              = link_to 'Bank Connections', services_path, {class: 'nav-link'}
-            %li.nav-item
-              = link_to 'Bank Accounts', services_path, {class: 'nav-link'}
-            %li.nav-item
-              %a.nav-link{:href => "#"} Transactions
+          - if user_signed_in?
+            %ul.nav.flex-column.sticky-top.pl-0.pt-5.mt-3
+              %li.nav-item
+                = link_to root_path, {class: 'nav-link'} do
+                  Dashboard
+              %li.nav-item
+                %a.nav-link{:href => "#"} Transactions
         .col.main.pt-5.mt-3
 
           - flash.each do |key, value|

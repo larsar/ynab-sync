@@ -1,7 +1,7 @@
-= simple_form_for @service, :url => services_path, :method => :post do |f|
+= simple_form_for @source, :url => sources_path, :method => :post do |f|
   .form-group.row
     .col-sm-6.offset-sm-1
-      = f.input :type, {type: 'text'}
+      = f.input :type, {as: 'hidden', type: 'text'}
       = f.input :name, {label: 'Alias', class: 'form-control', required: true, type: 'text'}
       = f.input :nin, {label: 'National Identity Number', class: 'form-control', required: true, type: 'text'}
       = f.input :client_id, {label: 'Client ID', required: true}

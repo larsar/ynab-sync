@@ -1,0 +1,2 @@
+class SbankenAccount < Collection
+end

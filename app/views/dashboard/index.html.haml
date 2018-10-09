@@ -3,7 +3,7 @@
     .card.bg-success.text-white.h-100
       .card-body.bg-success
         .rotate
-          %i.fa.fa-user.fa-4x
+          %i.fa.fa-usd.fa-4x
         %h6.text-uppercase
           = link_to 'YNAB Budgets', budgets_path, {style: 'color:white'}
         %h1.display-4
@@ -12,37 +12,44 @@
     .card.text-white.bg-danger.h-100
       .card-body.bg-danger
         .rotate
-          %i.fa.fa-list.fa-4x
+          %i.fa.fa-institution.fa-4x
         %h6.text-uppercase
-          = link_to 'YNAB Accounts', ynab_accounts_path, {style: 'color:white'}
+          = link_to 'YNAB Accounts', accounts_path, {style: 'color:white'}
         %h1.display-4
-          = current_user.ynab_accounts.count
+          = current_user.accounts.count
   .col-xl-3.col-sm-6.py-2
     .card.text-white.bg-info.h-100
       .card-body.bg-info
         .rotate
-          %i.fa.fa-twitter.fa-4x
+          %i.fa.fa-link.fa-4x
         %h6.text-uppercase
-          = link_to 'Bank connections', services_path, {style: 'color:white'}
+          = link_to 'Bank connections', sources_path, {style: 'color:white'}
         %h1.display-4
-          = current_user.services.count
+          = current_user.sources.count
   .col-xl-3.col-sm-6.py-2
     .card.text-white.bg-warning.h-100
       .card-body
         .rotate
-          %i.fa.fa-share.fa-4x
+          %i.fa.fa-credit-card.fa-4x
         %h6.text-uppercase
-          = link_to 'Bank accounts', services_path, {style: 'color:white'}
+          = link_to 'Bank accounts', collections_path, {style: 'color:white'}
         %h1.display-4
-          X
+          = current_user.collections.count
 
-- unless current_user.ynab_access_token.blank?
-  .row.mb-3
-    .col-sm-5
+.row.mb-3
+  - unless current_user.ynab_access_token.blank?
+    .col-sm-6
       .card.mb-3
         .card-header
           YNAB Sync
         .card-body
           %p.card-text
             = link_to 'YNAB Sync', sync_budgets_path, {:method => :post, class: 'btn btn-secondary btn-sm'}
-
+  - unless current_user.sources.count == 0
+    .col-sm-6
+      .card.mb-3
+        .card-header
+          Bank Sync
+        .card-body
+          %p.card-text
+            = link_to 'Bank Sync', sync_banks_path, {:method => :post, class: 'btn btn-secondary btn-sm'}

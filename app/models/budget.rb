@@ -2,22 +2,13 @@ require 'net/http'
 
 class Budget < ApplicationRecord
   belongs_to :user
-  has_many :ynab_accounts, dependent: :destroy
+  has_many :accounts, dependent: :destroy
 
   def self.sync(user)
-    url = URI.parse('https://api.youneedabudget.com/v1/budgets')
-    http = Net::HTTP.new(url.host, url.port)
-    http.use_ssl = true
-    response = http.get(url.path, {
-        'Content-Type' => 'application/json',
-        'Accept' => 'application/json',
-        'Authorization' => "Bearer #{user.ynab_access_token}"
-    })
-    data = response.body
-
+    ynab_budgets_json = YnabAPI.budgets(user.ynab_access_token)
     synced_budget_ids = []
 
-    JSON.parse(data)['data']['budgets'].each do |budget|
+    ynab_budgets_json.each do |budget|
       existing_budget = Budget.where(id: budget['id'], user_id: user.id).first
 
       if existing_budget.nil?
@@ -39,7 +30,7 @@ class Budget < ApplicationRecord
       unless synced_budget_ids.include?(budget.id)
         budget.destroy!
       else
-        YnabAccount.sync(user, budget)
+        Account.sync(user, budget)
       end
     end
   end

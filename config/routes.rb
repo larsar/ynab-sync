@@ -6,15 +6,17 @@ Rails.application.routes.draw do
     get 'ynab_token', to: 'users#edit_ynab_access_token'
     post 'ynab_token', to: 'users#update_access_token'
 
-    resources :budgets
-    post 'sync_budgets', to: 'home#sync_budgets'
+    resources :budgets, :sources, :collections
+    resources :accounts do
+      post 'unlink', to: 'accounts#unlink'
+    end
+    post 'sync_budgets', to: 'dashboard#sync_budgets'
+    post 'sync_banks', to: 'dashboard#sync_banks'
 
-    resources :services
-    get 'sbanken/new', to: 'services#new', type: Service::SBANKEN
-    resources :ynab_accounts
+    get 'sbanken/new', to: 'sources#new', type: Source::SBANKEN
 
   end
 
-  root :to => 'home#index'
+  root :to => 'dashboard#index'
 
 end

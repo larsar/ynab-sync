@@ -7,9 +7,12 @@
             %tr
               %th
                 Name
+              %th
+                Accounts
           %tbody
             - @budgets.each do |budget|
               %tr
                 %td
                   = budget.name
-
+                %td
+                  = budget.accounts.count

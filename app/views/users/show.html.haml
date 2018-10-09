@@ -26,4 +26,17 @@
           %br
           %br
           = link_to 'Edit username and/or password', edit_user_registration_path, {class: 'btn btn-secondary btn-sm'}
+.row
+  .col-sm-5.offset-sm-1
+    .card.mb-3
+      .card-header
+        Bank Connections
+      .card-body
+        %p.card-text
+          You have
+          = current_user.sources.count
+          bank connections.
+          %br
+          %br
+            = link_to 'Edit connections', sources_path, {class: 'btn btn-secondary btn-sm'}
 

@@ -3,18 +3,22 @@ services:
   db:
     image: postgres
     ports:
-          - "45432:5432"
+      - "45432:5432"
+  redis:
+    image: redis
+    ports:
+      - "46379:6379"
   web:
     build: .
     command: /myapp/start.sh
-    volumes:
-      - .:/myapp
     ports:
-      - "3003:3000"
+      - "3004:3000"
     volumes:
       - .:/myapp
     depends_on:
       - db
     environment:
-      - RAILS_ENV=development
-      - DATABASE_URL=postgres://postgres@db:5432/development
+      - RAILS_ENV=production
+      - DATABASE_URL=postgres://postgres@db:5432/production
+      - REDIS_URL=redis://redis:6379/0
+      - RAILS_SERVE_STATIC_FILES=true

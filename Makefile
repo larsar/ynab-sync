@@ -33,8 +33,17 @@ bash-web:
 bash-db:
 	docker-compose exec db bash
 
-migrate:
+db-create:
+	rake db:create
+
+db-migrate:
 	rake db:migrate
+
+dev-up: up db-create db-migrate
+
+redis-cli:
+	docker-compose run --rm redis redis-cli -h redis -p 6379
+
 
 
 

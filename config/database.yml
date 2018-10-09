@@ -8,3 +8,6 @@ development: &default
   template: template0
   pool: 5
 
+production:
+  <<: *default
+  database: production

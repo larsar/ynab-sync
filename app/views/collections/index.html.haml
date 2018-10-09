@@ -1,4 +1,4 @@
-- if @ynab_accounts.count > 0
+- if @collections.count > 0
   .row.my-4
     .col-sm-6.offset-sm-1
       .table-responsive
@@ -8,12 +8,12 @@
               %th
                 Name
               %th
-                Budget
+                Source
           %tbody
-            - @ynab_accounts.each do |ynab_account|
+            - @collections.each do |collection|
               %tr
                 %td
-                  = ynab_account.name
+                  = collection.name
                 %td
-                  = ynab_account.budget.name
+                  = collection.source.name
 

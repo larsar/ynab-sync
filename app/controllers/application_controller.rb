@@ -8,4 +8,12 @@ class ApplicationController < ActionController::Base
 
   self.responder = ApplicationResponder
   respond_to :html
+
+  def render_not_found
+    render :file => "#{Rails.root}/public/404.html",  layout: false, status: :not_found
+  end
+
+  def render_forbidden
+    render body: nil, status: :forbidden
+  end
 end

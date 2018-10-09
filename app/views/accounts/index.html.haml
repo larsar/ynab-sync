@@ -1,0 +1,32 @@
+- if @accounts.count > 0
+  .row.my-4
+    .col-sm-6.offset-sm-1
+      .table-responsive
+        %table.table.table-striped
+          %thead.thead-inverse
+            %tr
+              %th
+                Name
+              %th
+                Budget
+              %th
+                Linked with
+              %th
+          %tbody
+            - @accounts.each do |account|
+              %tr
+                %td
+                  = account.name
+                %td
+                  = account.budget.name
+                - if account.collection
+                  %td
+                    = account.collection.display_name
+                  %td
+                    = link_to 'Unlink', account_unlink_path(account), {method: :post}
+                - else
+                  %td
+                  %td
+                    = link_to 'Link', edit_account_path(account)
+
+

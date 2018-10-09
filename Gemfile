@@ -18,7 +18,8 @@ gem 'haml'
 gem 'responders'
 gem 'simple_form'
 gem 'jsonb_accessor', '~> 1.0.0'
-
+gem 'font-awesome-rails'
+gem 'redis-rails'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]

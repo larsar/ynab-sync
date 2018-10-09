@@ -1,4 +1,4 @@
-= simple_form_for(@user, url: ynab_path, method: :post) do |f|
+= simple_form_for(@user, url: ynab_token_path, method: :post) do |f|
   .form-group.row
     .col-sm-6.offset-sm-1
       = f.input :ynab_access_token, {label: 'Personal Access Token', class: 'form-control', required: true, :type => "text"}
