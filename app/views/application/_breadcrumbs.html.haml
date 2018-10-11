@@ -1,0 +1,8 @@
+%ol.breadcrumb
+  - @breadcrumbs.each do |crumb|
+    - if crumb == @breadcrumbs.last
+      %li.breadcrumb-item.active
+        = crumb[:title]
+    - else
+      %li.breadcrumb-item
+        = link_to crumb[:title], crumb[:link]

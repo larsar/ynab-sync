@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_10_062826) do
+ActiveRecord::Schema.define(version: 2018_10_24_103018) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -19,10 +19,11 @@ ActiveRecord::Schema.define(version: 2018_10_10_062826) do
   create_table "accounts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
     t.jsonb "properties"
-    t.uuid "budget_id"
+    t.uuid "budget_id", null: false
     t.uuid "collection_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "enabled", default: true
     t.index ["budget_id"], name: "index_accounts_on_budget_id"
     t.index ["collection_id"], name: "index_accounts_on_collection_id"
   end
@@ -30,9 +31,10 @@ ActiveRecord::Schema.define(version: 2018_10_10_062826) do
   create_table "budgets", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
     t.jsonb "properties"
-    t.uuid "user_id"
+    t.uuid "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "enabled", default: true
     t.index ["user_id"], name: "index_budgets_on_user_id"
   end
 
@@ -40,42 +42,52 @@ ActiveRecord::Schema.define(version: 2018_10_10_062826) do
     t.string "type"
     t.string "name"
     t.string "ext_id"
-    t.uuid "source_id"
+    t.uuid "source_id", null: false
     t.jsonb "properties"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "enabled", default: true
     t.index ["source_id"], name: "index_collections_on_source_id"
   end
 
   create_table "items", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "type"
-    t.uuid "collection_id"
+    t.uuid "collection_id", null: false
     t.jsonb "properties"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.float "amount"
+    t.string "ext_id"
+    t.datetime "date"
     t.index ["collection_id"], name: "index_items_on_collection_id"
   end
 
   create_table "sources", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "type"
     t.string "name"
-    t.uuid "user_id"
+    t.uuid "user_id", null: false
     t.jsonb "properties"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "enabled", default: true
     t.index ["user_id"], name: "index_sources_on_user_id"
   end
 
   create_table "transactions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "ext_id"
     t.string "state"
+    t.float "amount"
     t.boolean "approved"
     t.datetime "date"
     t.jsonb "properties"
-    t.uuid "account_id"
+    t.uuid "account_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "memo"
+    t.uuid "item_id"
     t.index ["account_id"], name: "index_transactions_on_account_id"
+    t.index ["ext_id"], name: "index_transactions_on_ext_id"
+    t.index ["item_id"], name: "index_transactions_on_item_id"
   end
 
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -96,4 +108,5 @@ ActiveRecord::Schema.define(version: 2018_10_10_062826) do
   add_foreign_key "items", "collections"
   add_foreign_key "sources", "users"
   add_foreign_key "transactions", "accounts"
+  add_foreign_key "transactions", "items"
 end

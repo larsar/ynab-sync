@@ -1,32 +1,34 @@
 - if @accounts.count > 0
   .row.my-4
-    .col-sm-6.offset-sm-1
+    .col-sm-9.offset-sm-1
       .table-responsive
         %table.table.table-striped
           %thead.thead-inverse
             %tr
+              - unless @budget
+                %th
+                  Budget
               %th
-                Name
-              %th
-                Budget
+                Account name
               %th
                 Linked with
               %th
           %tbody
             - @accounts.each do |account|
               %tr
+                - unless @budget
+                  %td
+                    = link_to account.budget.name, budget_path(account.budget)
                 %td
-                  = account.name
-                %td
-                  = account.budget.name
+                  = link_to account.name, budget_account_path(@budget, account)
                 - if account.collection
                   %td
                     = account.collection.display_name
                   %td
-                    = link_to 'Unlink', account_unlink_path(account), {method: :post}
+                    = link_to 'Unlink', budget_account_unlink_path(@budget, account), {method: :post}
                 - else
                   %td
                   %td
-                    = link_to 'Link', edit_account_path(account)
+                    = link_to 'Link', edit_budget_account_path(@budget, account)
 
 

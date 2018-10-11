@@ -1,0 +1,33 @@
+.col-sm-6
+  .card.mb-3
+    .card-header
+      %b
+        Budget:
+      = @budget.name
+    .card-body
+      .row
+        .col-sm-9
+          %p.card-text
+            %b
+              Status:
+            = @budget.enabled? ? 'Enabled' : 'Disabled'
+        .col-sm-3
+          %p
+            - if @budget.enabled?
+              = link_to 'Disable', budget_disable_path(@budget), {method: :post, class: 'btn btn-warning btn-sm'}
+            - else
+              = link_to 'Enable', budget_enable_path(@budget), {method: :post, class: 'btn btn-secondary btn-sm'}
+
+  .card.mb-3
+    .card-header
+      %b
+        Accounts
+    .card-body
+      .row
+        .col-sm-9
+          %p.card-text
+            %b
+              Number of accounts:
+            = @budget.accounts.count
+          %p
+            = link_to 'Accounts', budget_accounts_path(@budget), { class: 'btn btn-primary btn-sm'}

@@ -24,6 +24,9 @@ module YnabSync
     end
 
     config.autoload_paths += %W(#{config.root}/lib) # add this line
+
+    ENABLED = 'enabled'
+    DISABLED = 'disabled'
   end
 
 end

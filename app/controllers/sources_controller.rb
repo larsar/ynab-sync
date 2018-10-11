@@ -1,13 +1,17 @@
 class SourcesController < ApplicationController
   respond_to :html
 
+  def breadcrumbs
+    add_crumb 'Bank sources', sources_path
+  end
+
   def index
     @sources = current_user.sources
   end
 
   def new
     case params[:type]
-    when Source::SBANKEN
+    when Sbanken.name
       @source = Sbanken.new
       @source.name = 'My Sbanken'
     else
@@ -15,9 +19,14 @@ class SourcesController < ApplicationController
     end
   end
 
+  def show
+    @source = Source.where("user_id = '%s' AND id = '%s'", current_user.id, params[:id]).first
+    add_crumb @source.name, source_path(@source)
+  end
+
   def create
     case params[:sbanken][:type]
-    when Source::SBANKEN
+    when Sbanken.name
       par = params[:sbanken].permit(:name, :nin, :client_id, :secret)
       @source = Sbanken.new(par)
     else

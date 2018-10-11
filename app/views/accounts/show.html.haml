@@ -1,0 +1,67 @@
+= @account.name
+
+.row.my-4
+  .col-sm-6
+    .table-responsive
+      %table.table.table-striped
+        %thead.thead-inverse
+          %tr
+            %th Date
+            %th Amount
+            %th Payee
+            %th Category
+            %th
+        %tbody
+          - @transactions.each do |transaction|
+            %tr
+              %td
+                = transaction.date.strftime("%Y-%m-%d")
+              %td
+                = transaction.amount
+              %td
+                = #transaction.payee_name
+              %td
+                = #transaction.category_name
+              %td
+                - case transaction.state
+                - when Transaction::RECONCILED
+                  = icon('fa', 'lock')
+                - when Transaction::UNCLEARED
+                  = link_to transaction_clear_path(transaction), method: :post do
+                    = icon('far', 'circle')
+                - when Transaction::CLEARED
+                  = link_to transaction_unclear_path(transaction), method: :post do
+                    = icon('far', 'check-circle')
+                - if transaction.item
+                  = icon('fa', 'link')
+
+  .col-sm-6
+    .table-responsive
+      %table.table.table-striped
+        %thead.thead-inverse
+          %tr
+            %th
+            %th Date
+            %th Amount
+            %th Memo
+            %th
+        %tbody
+          - @items.each do |item|
+            - linked = @account.items.include?(item)
+            %tr
+              %td
+                - if linked
+                  = icon('fa', 'link')
+                - else
+                  = link_to transactions_import_item_path(item_id: item.id), method: :post do
+                    = icon('fa', 'plus-square')
+                  - if @transactions.where(amount: item.amount).count > 0
+                    = icon('fa', 'asterisk')
+
+              %td
+                = item.date.strftime("%Y-%m-%d")
+              %td
+                = item.amount
+              %td
+                = item.memo
+              %td

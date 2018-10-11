@@ -21,10 +21,12 @@
         %span.navbar-toggler-icon
       #collapsingNavbar.navbar-collapse.collapse
         - if user_signed_in?
-          %ul.navbar-nav
-            %li.nav-item
-              = link_to 'Setup', setup_path, {class: 'nav-link'}
           %ul.navbar-nav.ml-auto
+            %li
+              .nav-link
+                YNAB API Rate Limit:
+                = ynab_rate_limit
+
             %li.nav-item
               = link_to current_user.email, setup_path, {class: 'nav-link'}
             %li.nav-item
@@ -32,18 +34,17 @@
                 Logout
     #main.container-fluid
       .row.row-offcanvas.row-offcanvas-left
-        #sidebar.col-md-3.col-lg-2.sidebar-offcanvas.bg-light.pl-0{:role => "navigation"}
+        #sidebar.col-md-1.col-lg-1.sidebar-offcanvas.bg-light.pl-0{:role => "navigation"}
           - if user_signed_in?
             %ul.nav.flex-column.sticky-top.pl-0.pt-5.mt-3
               %li.nav-item
-                = link_to root_path, {class: 'nav-link'} do
-                  Dashboard
-              %li.nav-item
-                %a.nav-link{:href => "#"} Transactions
+                = link_to 'Setup', setup_path, {class: 'nav-link'}
         .col.main.pt-5.mt-3
 
           - flash.each do |key, value|
             %div{:class => "#{flash_class(key)}"}
               = value
+
+          = render partial: 'breadcrumbs'
 
           = yield

@@ -18,7 +18,7 @@ gem 'haml'
 gem 'responders'
 gem 'simple_form'
 gem 'jsonb_accessor', '~> 1.0.0'
-gem 'font-awesome-rails'
+gem 'font-awesome-sass', '~> 5.4.1'
 gem 'redis-rails'
 
 group :development, :test do

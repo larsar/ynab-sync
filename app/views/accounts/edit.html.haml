@@ -1,4 +1,4 @@
-= simple_form_for @account do |f|
+= simple_form_for @account, :url => budget_account_path(@budget, @account) do |f|
   .form-group.row
     .col-sm-6.offset-sm-1
       = f.association :collection, :collection => @collections, label_method: :display_name, :prompt => 'Select account to link with'

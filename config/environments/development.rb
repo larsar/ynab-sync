@@ -66,6 +66,6 @@ Rails.application.configure do
   config.redis_cache_url = "#{config.redis_url}/cache"
   config.cache_store = :redis_store, config.redis_cache_url, { expires_in: 1.minutes }
 
-  config.log_level = :debug
+  config.log_level = :info
 
 end

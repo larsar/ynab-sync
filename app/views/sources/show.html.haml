@@ -1,1 +1,5 @@
-show service
+= link_to 'Bank accounts', source_collections_path(@source)
+%br
+= link_to 'Edit', edit_source_path(@source), class: 'btn btn-warning'
+%br
+= link_to 'Delete', source_path(@source), :method => :delete, class: 'btn btn-danger', :confirm => 'Delete service and associated transactions?'

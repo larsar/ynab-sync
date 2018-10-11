@@ -1,4 +1,4 @@
-- if @budgets.count > 0
+- if current_user.budgets.count > 0
   .row.my-4
     .col-sm-6.offset-sm-1
       .table-responsive
@@ -8,11 +8,19 @@
               %th
                 Name
               %th
+                Enabled
+              %th
                 Accounts
           %tbody
-            - @budgets.each do |budget|
+            - current_user.budgets.each do |budget|
               %tr
                 %td
-                  = budget.name
+                  = link_to budget.name, budget_path(budget)
                 %td
-                  = budget.accounts.count
+                  - if budget.enabled?
+                    %i.fa.fa-check
+                %td
+                  - if budget.enabled?
+                    = budget.accounts.count
+
+

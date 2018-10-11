@@ -13,7 +13,7 @@
             - @collections.each do |collection|
               %tr
                 %td
-                  = collection.name
+                  = link_to collection.name, source_collection_path(@source, collection)
                 %td
                   = collection.source.name
 
