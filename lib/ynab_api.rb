@@ -2,32 +2,39 @@ class YnabAPI
   def self.accounts(user_id, budget_id, access_token)
     Rails.cache.fetch(['accounts', 'YNAB', budget_id], expires_in: 10.minutes) do
       url = "https://api.youneedabudget.com/v1/budgets/#{budget_id}/accounts"
-      send_api_call(url, :get, nil, user_id, access_token)['data']['accounts']
+      response = send_api_call(url, :get, nil, user_id, access_token)
+      JSON.parse(response.body)['data']['accounts']
     end
   end
 
   def self.budgets(user_id, access_token)
     Rails.cache.fetch(['budgets', user_id], expires_in: 10.minutes) do
       url = 'https://api.youneedabudget.com/v1/budgets'
-      send_api_call(url, :get, nil, user_id, access_token)['data']['budgets']
+      response = send_api_call(url, :get, nil, user_id, access_token)
+      JSON.parse(response.body)['data']['budgets']
     end
   end
 
   def self.transactions(user_id, budget_id, account_id, access_token)
-    #Rails.cache.fetch(['transactions', budget_id, account_id], expires_in: 10.minutes) do
-      url = "https://api.youneedabudget.com/v1/budgets/#{budget_id}/accounts/#{account_id}/transactions?since_date=#{(Time.now - 50.days).strftime("%Y-%m-%d")}"
-      send_api_call(url, :get, nil, user_id, access_token)['data']['transactions']
-    #end
+    url = "https://api.youneedabudget.com/v1/budgets/#{budget_id}/accounts/#{account_id}/transactions?since_date=#{(Time.now - 50.days).strftime("%Y-%m-%d")}"
+    response = send_api_call(url, :get, nil, user_id, access_token)
+    JSON.parse(response.body)['data']['transactions']
   end
 
   def self.create_transaction(user_id, budget_id, data, access_token)
     url = "https://api.youneedabudget.com/v1/budgets/#{budget_id}/transactions"
-    send_api_call(url, :post, {transaction: data}, user_id, access_token)['data']['transaction']
+    response = send_api_call(url, :post, { transaction: data }, user_id, access_token)
+    if response.code == '409'
+      raise 'Transaction is already imported in YNAB'
+    else
+      JSON.parse(response.body)['data']['transaction']
+    end
   end
 
   def self.update_transaction(user_id, budget_id, transaction_id, data, access_token)
     url = "https://api.youneedabudget.com/v1/budgets/#{budget_id}/transactions/#{transaction_id}"
-    send_api_call(url, :put, {transaction: data}, user_id, access_token)['data']['transaction']
+    response = send_api_call(url, :put, { transaction: data }, user_id, access_token)
+    JSON.parse(response.body)['data']['transaction']
   end
 
   def self.send_api_call(url, method, data, user_id, access_token)
@@ -54,8 +61,7 @@ class YnabAPI
     end
 
     Rails.cache.write([Cache::API_RATE_LIMIT_YNAB, user_id, api_rate_limit_token], response.header['x-rate-limit'], expires_in: 60.minutes)
-
-    JSON.parse(response.body)
+    response
   end
 
 end

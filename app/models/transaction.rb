@@ -21,21 +21,6 @@ class Transaction < ApplicationRecord
     self.save!
   end
 
-  def create_ynab_transaction
-    data = {
-        account_id: self.account_id,
-        date: "#{self.date.strftime("%Y-%m-%d")}",
-        amount: (self.amount * 1000).to_i,
-        memo: self.memo,
-        cleared: self.state
-    }
-    unless self.item.nil?
-      data[:import_id] = self.item.ext_id
-    end
-
-    transaction_hash = YnabAPI.create_transaction(self.account.budget.user_id, self.account.budget_id, data, self.account.budget.user.ynab_access_token)
-    update_from_hash(transaction_hash)
-  end
 
   def update_from_hash(transaction_hash)
     self.ext_id = transaction_hash['id']
@@ -60,6 +45,22 @@ class Transaction < ApplicationRecord
     transaction.account = account
     transaction.update_from_hash(transaction_hash)
     transaction
+  end
+
+  def self.import_from_item(item, account)
+    data = {
+        account_id: account.id,
+        date: "#{item.date.strftime("%Y-%m-%d")}",
+        amount: (item.amount * 1000).to_i,
+        memo: item.memo,
+        cleared: Transaction::CLEARED,
+        import_id: item.ext_id
+    }
+
+    transaction_hash = YnabAPI.create_transaction(account.budget.user_id, account.budget_id, data, account.budget.user.ynab_access_token)
+    transaction = Transaction.upsert(transaction_hash, account)
+    transaction.item = item
+    transaction.save!
   end
 
 end

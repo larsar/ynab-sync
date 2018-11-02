@@ -17,16 +17,11 @@ class TransactionsController < ApplicationController
     item = current_user.items.where(id: params[:item_id]).first
     account = current_user.accounts.where(collection_id: item.collection_id).first
 
-    t = Transaction.new
-    t.account = account
-    t.item = item
-    t.amount = item.amount
-    t.date = item.date
-    t.memo = item.memo
-    t.state = Transaction::CLEARED
-    t.save!
-    t.create_ynab_transaction
-
+    begin
+      Transaction.import_from_item(item, account)
+    rescue RuntimeError => e
+      flash[:error] = e.message
+    end
     redirect_back(fallback_location: root_path)
   end
 
