@@ -1,50 +1,47 @@
 class SbankenAccount < Collection
 
-  def sync
-    access_token = SbankenAPI.access_token(self.source.client_id, self.source.secret, self.source.id)
-    transactions_json = SbankenAPI.transactions(self.ext_id, access_token, self.id, self.source.nin)
-
-    puts transactions_json
-  end
-
   def sync_transactions
     access_token = SbankenAPI.access_token(self.source.client_id, self.source.secret, self.source.id)
     transactions_json = SbankenAPI.transactions(self.ext_id, access_token, self.source.id, self.source.nin)
     synced_transaction_ids = []
-    created = 0
-    updated = 0
-    deleted = 0
 
-    transactions_json.each do |transaction_json|
-      next if transaction_json['transactionId'] == '0'
-      transaction = SbankenTransaction.where(collection_id: self.id, ext_id: transaction_json['transactionId']).first
-      if transaction.nil?
-        created += 1
-        transaction = SbankenTransaction.new
-        transaction.collection = self
-        transaction.amount = transaction_json['amount']
-        transaction.ext_id = transaction_json['transactionId']
-      else
-        updated += 1
-      end
-      transaction.amount = transaction_json['amount']
-      transaction.date = transaction_json['accountingDate']
-      transaction.memo = transaction_json['text']
-
-      transaction.save!
+    transactions_json.each do |transaction_hash|
+      next if transaction_hash['transactionId'] == '0'
+      transaction = SbankenTransaction.upsert(transaction_hash, self)
       synced_transaction_ids << transaction.id
     end
 
     self.reload
     self.items.each do |item|
       if synced_transaction_ids.include?(item.id)
-        updated += 1
+        self.accounts.each do |account|
+          if account.auto_sync && account.transactions.where(item_id: item.id).count == 0
+            begin
+              Transaction.import_from_item(item, account)
+            rescue RuntimeError => e
+              puts "Failed to import #{item.memo}"
+            end
+          end
+        end
       else
-        deleted += 1
         item.destroy!
       end
     end
-    { created: created, updated: updated, deleted: deleted }
+  end
+
+  def self.upsert(account_hash, source)
+    account = SbankenAccount.where(source_id: source.id, ext_id: account_hash['accountId']).first
+    if account.nil?
+      account = SbankenAccount.new
+      account.source = source
+    end
+    account.name = account_hash['name']
+    account.ext_id = account_hash['accountId']
+    account.name = account_hash['name']
+    account.properties = account_hash.to_json
+    account.save!
+
+    account
   end
 
 

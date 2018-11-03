@@ -16,7 +16,6 @@ class Account < ApplicationRecord
     self.reload
     self.transactions.each do |transaction|
       unless synced_transaction_ids.include?(transaction.id)
-        puts "Deleting transaction: account=#{transaction.account.name} amount=#{transaction.amount} id=#{transaction.id}"
         transaction.destroy!
       end
     end

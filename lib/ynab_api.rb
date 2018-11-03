@@ -16,7 +16,7 @@ class YnabAPI
   end
 
   def self.transactions(user_id, budget_id, account_id, access_token)
-    url = "https://api.youneedabudget.com/v1/budgets/#{budget_id}/accounts/#{account_id}/transactions?since_date=#{(Time.now - 50.days).strftime("%Y-%m-%d")}"
+    url = "https://api.youneedabudget.com/v1/budgets/#{budget_id}/accounts/#{account_id}/transactions?since_date=#{(Time.now - 3.weeks).strftime("%Y-%m-%d")}"
     response = send_api_call(url, :get, nil, user_id, access_token)
     JSON.parse(response.body)['data']['transactions']
   end
@@ -38,8 +38,6 @@ class YnabAPI
   end
 
   def self.send_api_call(url, method, data, user_id, access_token)
-    api_rate_limit_token = Cache.token(Cache::API_RATE_LIMIT_YNAB_TOKEN, user_id, 60.minutes)
-
     url = URI.parse(url)
     http = Net::HTTP.new(url.host, url.port)
     http.use_ssl = true
@@ -60,6 +58,11 @@ class YnabAPI
       response = http.post(path, data.to_json, headers)
     end
 
+    rate_counter = response.header['x-rate-limit'].split('/')[0]
+    if rate_counter == 1
+      Cache.token_reset(Cache::API_RATE_LIMIT_YNAB_TOKEN, user_id)
+    end
+    api_rate_limit_token = Cache.token(Cache::API_RATE_LIMIT_YNAB_TOKEN, user_id, 60.minutes)
     Rails.cache.write([Cache::API_RATE_LIMIT_YNAB, user_id, api_rate_limit_token], response.header['x-rate-limit'], expires_in: 60.minutes)
     response
   end

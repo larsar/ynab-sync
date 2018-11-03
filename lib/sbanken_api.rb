@@ -5,9 +5,9 @@ class SbankenAPI
     end
   end
 
-  def self.transactions(ext_account_id, access_token, collection_id, nin)
-    Rails.cache.fetch(['transaction', Sbanken.name, collection_id], expires_in: 10.minutes) do
-      SbankenAPI.http_get("https://api.sbanken.no/bank/api/v1/Transactions/#{ext_account_id}?startDate=#{(Time.now - 32.days).strftime("%Y-%m-%d")}", access_token, nin)['items']
+  def self.transactions(ext_account_id, access_token, source_id, nin)
+    Rails.cache.fetch(['transaction', Sbanken.name, ext_account_id, source_id], expires_in: 10.minutes) do
+      SbankenAPI.http_get("https://api.sbanken.no/bank/api/v1/Transactions/#{ext_account_id}?startDate=#{(Time.now - 2.weeks).strftime("%Y-%m-%d")}", access_token, nin)['items']
     end
   end
 

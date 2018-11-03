@@ -38,9 +38,6 @@ class Transaction < ApplicationRecord
     if transaction.nil?
       transaction = Transaction.new
       transaction.ext_id = transaction_hash['id']
-      puts "Creating new transaction: account=#{self.name} amount=#{transaction_hash['amount'] / 1000} id=#{transaction.id} json_id=#{transaction_hash['id']}"
-    else
-      puts "Updating transaction: account=#{transaction.account.name} amount=#{transaction.amount} id=#{transaction.id} json_id=#{transaction_hash['id']}"
     end
     transaction.account = account
     transaction.update_from_hash(transaction_hash)

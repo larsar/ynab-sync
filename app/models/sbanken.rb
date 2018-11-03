@@ -13,43 +13,22 @@ class Sbanken < Source
     access_token = SbankenAPI.access_token(self.client_id, self.secret, self.id)
     accounts_json = SbankenAPI.accounts(access_token, self.id, self.nin)
     synced_account_ids = []
-    created = 0
-    updated = 0
-    deleted = 0
 
     accounts_json.each do |account_json|
-      existing_account = SbankenAccount.where(source_id: self.id, ext_id: account_json['accountId']).first
-      if existing_account.nil?
-        created += 1
-        new_account = SbankenAccount.new
-        new_account.source = self
-        new_account.ext_id = account_json['accountId']
-        new_account.name = account_json['name']
-        new_account.properties = account_json.to_json
-        new_account.save!
-        synced_account_ids << new_account.id
-      else
-        updated += 1
-        synced_account_ids << existing_account.id
-        existing_account.name = account_json['name']
-        existing_account.properties = account_json.to_json
-        existing_account.save!
-      end
+      account = SbankenAccount.upsert(account_json, self)
+      synced_account_ids << account.id
     end
 
     self.reload
-    self.collections.each do |account|
-      if synced_account_ids.include?(account.id)
-        updated += 1
-        if Account.where(collection_id: account.id).count > 0
-          account.sync_transactions
+    self.collections.each do |collection|
+      if synced_account_ids.include?(collection.id)
+        if Account.where(collection_id: collection.id).count > 0
+          collection.sync_transactions
         end
       else
-        deleted += 1
-        account.destroy!
+        collection.destroy!
       end
     end
-    { created: created, updated: updated, deleted: deleted }
   end
 
 end

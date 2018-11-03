@@ -9,16 +9,17 @@ class AccountsController < ApplicationController
       add_crumb @budget.name, budget_path(@budget)
       add_crumb 'Accounts', budget_accounts_path(@budget)
     end
-    if params[:id]
-      @account = current_user.accounts.where(id: params[:id]).first
+    account_id = params[:account_id] ||= params[:id]
+    if account_id
+      @account = current_user.accounts.where(id: account_id).first
     end
   end
 
   def index
     if @budget
-      @accounts = Account.joins(:budget).where("budgets.user_id = '%s' AND budget_id = '%s'",  current_user.id, @budget.id).order('budgets.name ASC')
+      @accounts = Account.joins(:budget).where("budgets.user_id = '%s' AND budget_id = '%s'", current_user.id, @budget.id).order('budgets.name ASC')
     else
-      @accounts = Account.joins(:budget).where("budgets.user_id = '%s'",  current_user.id).order('budgets.name ASC')
+      @accounts = Account.joins(:budget).where("budgets.user_id = '%s'", current_user.id).order('budgets.name ASC')
     end
   end
 
@@ -30,7 +31,11 @@ class AccountsController < ApplicationController
   def show
     add_crumb @account.name, budget_account_path(@budget, @account)
     @transactions = Transaction.where(account_id: @account.id).order('date DESC')
-    @items = Item.joins(:collection).where("collections.id = '%s'", @account.collection_id).order('date DESC')
+    unless @account.collection_id.blank?
+      @items = Item.joins(:collection).where("collections.id = '%s'", @account.collection_id).order('date DESC')
+    else
+      @items = []
+    end
   end
 
   def update
@@ -50,6 +55,19 @@ class AccountsController < ApplicationController
     redirect_to budget_accounts_path(@budget)
   end
 
+  def auto_sync
+    render_not_found and return if @account.nil?
+    @account.auto_sync = true
+    @account.save!
+    redirect_to budget_account_path(@budget, @account)
+  end
+
+  def manual_sync
+    render_not_found and return if @account.nil?
+    @account.auto_sync = false
+    @account.save!
+    redirect_to budget_account_path(@budget, @account)
+  end
 
   def sync
     Budget.sync(current_user)

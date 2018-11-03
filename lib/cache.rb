@@ -14,6 +14,10 @@ class Cache
     t
   end
 
+  def self.reset_token(token_id, object_id)
+    Rails.cache.delete([token_id, object_id])
+  end
+
   def self.pseudo_random_token(length)
     o = [('a'..'z'), ('A'..'Z')].map { |i| i.to_a }.flatten
     (0..length - 1).map { o[rand(o.length)] }.join

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_02_134809) do
+ActiveRecord::Schema.define(version: 2018_11_05_231318) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -24,6 +24,7 @@ ActiveRecord::Schema.define(version: 2018_11_02_134809) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "enabled", default: true
+    t.boolean "auto_sync", default: false
     t.index ["budget_id"], name: "index_accounts_on_budget_id"
     t.index ["collection_id"], name: "index_accounts_on_collection_id"
   end
@@ -96,6 +97,7 @@ ActiveRecord::Schema.define(version: 2018_11_02_134809) do
     t.jsonb "properties"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "last_synced_at"
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 

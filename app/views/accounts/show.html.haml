@@ -1,5 +1,13 @@
-= @account.name
-
+%h2
+  = @account.name
+%p
+  Auto sync:
+  = @account.auto_sync
+  %br
+  - if @account.auto_sync?
+    = link_to 'Switch to Manual', budget_account_manual_sync_path(@budget, @account), {method: :post, class: 'btn btn-warning btn-sm'}
+  - else
+    = link_to 'Switch to Auto', budget_account_auto_sync_path(@budget, @account), {method: :post, class: 'btn btn-secondary btn-sm'}
 .row.my-4
   .col-sm-6
     .table-responsive

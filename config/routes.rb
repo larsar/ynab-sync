@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   authenticate :user do
     get 'setup', to: 'users#show'
     get 'ynab_token', to: 'users#edit_ynab_access_token'
-    post 'ynab_token', to: 'ufsers#update_access_token'
+    post 'ynab_token', to: 'users#update_access_token'
 
 
     resources :sources do
@@ -16,6 +16,8 @@ Rails.application.routes.draw do
       post 'disable', to: 'budgets#disable'
       resources 'accounts' do
         post 'unlink', to: 'accounts#unlink'
+        post 'manual_sync', to: 'accounts#manual_sync'
+        post 'auto_sync', to: 'accounts#auto_sync'
       end
     end
 
@@ -25,8 +27,7 @@ Rails.application.routes.draw do
     end
     post 'transactions/import/:item_id', to: 'transactions#import', as: :transactions_import_item
 
-    post 'sync_budgets', to: 'dashboard#sync_budgets'
-    post 'sync_banks', to: 'dashboard#sync_banks'
+    post 'sync', to: 'dashboard#sync'
 
     get 'sbanken/new', to: 'sources#new', type: Sbanken.name
 
