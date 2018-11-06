@@ -15,11 +15,17 @@ class SbankenAccount < Collection
     self.items.each do |item|
       if synced_transaction_ids.include?(item.id)
         self.accounts.each do |account|
-          if account.auto_sync && account.transactions.where(item_id: item.id).count == 0
-            begin
-              Transaction.import_from_item(item, account)
-            rescue RuntimeError => e
-              puts "Failed to import #{item.memo}"
+          if account.transactions.where(item_id: item.id).count == 0
+            prev_imported_transaction = account.transactions.where(import_id: item.ext_id).first
+            if !prev_imported_transaction.nil?
+              prev_imported_transaction.item = item
+              prev_imported_transaction.save!
+            elsif account.auto_sync
+              begin
+                Transaction.import_from_item(item, account)
+              rescue RuntimeError => e
+                puts "Failed to import #{item.memo}"
+              end
             end
           end
         end

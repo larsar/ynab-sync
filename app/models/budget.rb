@@ -5,7 +5,9 @@ class Budget < ApplicationRecord
   has_many :accounts, dependent: :destroy
   has_many :transactions, through: :accounts
 
-  def self.sync(user)
+  def self.sync_budget(user)
+    return if user.ynab_access_token.blank?
+
     budgets_json = YnabAPI.get_budgets(user.id, user.ynab_access_token)
     synced_budget_ids = []
 

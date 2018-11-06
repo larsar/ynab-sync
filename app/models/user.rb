@@ -10,9 +10,9 @@ class User < ApplicationRecord
   has_many :transactions, through: :accounts
 
   def sync
-    Budget.sync(self)
+    Budget.sync_budget(self)
     self.sources.each do |source|
-      source.sync
+      source.sync_source
     end
     self.last_synced_at = Time.now
     self.save!

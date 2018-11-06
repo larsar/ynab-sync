@@ -9,7 +9,7 @@ class Sbanken < Source
   validates :client_id, presence: true
   validates :secret, presence: true
 
-  def sync
+  def sync_source
     access_token = SbankenAPI.get_access_token(self.client_id, self.secret, self.id)
     accounts_json = SbankenAPI.get_accounts(access_token, self.id, self.nin)
     synced_account_ids = []

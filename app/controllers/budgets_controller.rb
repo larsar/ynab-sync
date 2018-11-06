@@ -29,7 +29,7 @@ class BudgetsController < ApplicationController
   end
 
   def sync
-    Budget.sync(current_user)
+    Budget.sync_budget(current_user)
     redirect_to budgets_path
   end
 

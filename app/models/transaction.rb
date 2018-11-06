@@ -29,6 +29,7 @@ class Transaction < ApplicationRecord
     self.date = transaction_hash['date'].to_date
     self.state = transaction_hash['cleared']
     self.memo = transaction_hash['memo']
+    self.import_id = transaction_hash['import_id']
     self.save!
   end
 

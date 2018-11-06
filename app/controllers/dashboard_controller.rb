@@ -5,6 +5,8 @@ class DashboardController < ApplicationController
     if current_user.ynab_access_token.blank?
       flash[:error] = 'YNAB personal access token is not set'
     end
+
+    @accounts = current_user.accounts.where('collection_id IS NOT NULL')
   end
 
 
