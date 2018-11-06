@@ -5,9 +5,10 @@ The main goal for this project is to automate the process of importing bank tran
 
 You can run the Ruby on Rails app locally or in the cloud.
 
-## Deploy to Heroku
-You can run the ynab sync service for free on Heroku. Choose a name for the application and which region you want to run it in. If you want to automate the sync process, for instance daily, you can use Heroku's scheduler to run the rake task.
+## Cloud deployment
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+
+You can run the ynab sync service for free on Heroku. Choose a name for the application and which region you want to run it in. If you want to automate the sync process, for instance daily, you can use Heroku's scheduler to run the rake task.
 
 ## Run locally
 The easisest way is to run the application and the databases in Docker, using docker-compose. If you have some basic development tools installed, in addition to Docker, you should be able to start everything by running:
