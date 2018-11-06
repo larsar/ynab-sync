@@ -10,8 +10,8 @@ class Sbanken < Source
   validates :secret, presence: true
 
   def sync
-    access_token = SbankenAPI.access_token(self.client_id, self.secret, self.id)
-    accounts_json = SbankenAPI.accounts(access_token, self.id, self.nin)
+    access_token = SbankenAPI.get_access_token(self.client_id, self.secret, self.id)
+    accounts_json = SbankenAPI.get_accounts(access_token, self.id, self.nin)
     synced_account_ids = []
 
     accounts_json.each do |account_json|

@@ -5,7 +5,7 @@ class Account < ApplicationRecord
   has_many :items, through: :transactions
 
   def sync_transactions
-    transactions_json = YnabAPI.transactions(budget.user_id, budget.id, self.id, budget.user.ynab_access_token)
+    transactions_json = YnabAPI.get_transactions(budget.user_id, budget.id, self.id, budget.user.ynab_access_token)
     synced_transaction_ids = []
 
     transactions_json.each do |transaction_hash|
@@ -23,7 +23,7 @@ class Account < ApplicationRecord
 
 
   def self.sync(user, budget)
-    accounts_json = YnabAPI.accounts(user.id, budget.id, user.ynab_access_token)
+    accounts_json = YnabAPI.get_accounts(user.id, budget.id, user.ynab_access_token)
     synced_account_ids = []
 
     accounts_json.each do |account_json|

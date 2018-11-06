@@ -1,8 +1,8 @@
 class SbankenAccount < Collection
 
   def sync_transactions
-    access_token = SbankenAPI.access_token(self.source.client_id, self.source.secret, self.source.id)
-    transactions_json = SbankenAPI.transactions(self.ext_id, access_token, self.source.id, self.source.nin)
+    access_token = SbankenAPI.get_access_token(self.source.client_id, self.source.secret, self.source.id)
+    transactions_json = SbankenAPI.get_transactions(self.ext_id, access_token, self.source.id, self.source.nin)
     synced_transaction_ids = []
 
     transactions_json.each do |transaction_hash|

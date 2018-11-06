@@ -6,7 +6,7 @@ class Budget < ApplicationRecord
   has_many :transactions, through: :accounts
 
   def self.sync(user)
-    budgets_json = YnabAPI.budgets(user.id, user.ynab_access_token)
+    budgets_json = YnabAPI.get_budgets(user.id, user.ynab_access_token)
     synced_budget_ids = []
 
     budgets_json.each do |budget_json|

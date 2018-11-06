@@ -1,5 +1,5 @@
 class YnabAPI
-  def self.accounts(user_id, budget_id, access_token)
+  def self.get_accounts(user_id, budget_id, access_token)
     Rails.cache.fetch(['accounts', 'YNAB', budget_id], expires_in: 10.minutes) do
       url = "https://api.youneedabudget.com/v1/budgets/#{budget_id}/accounts"
       response = send_api_call(url, :get, nil, user_id, access_token)
@@ -7,7 +7,7 @@ class YnabAPI
     end
   end
 
-  def self.budgets(user_id, access_token)
+  def self.get_budgets(user_id, access_token)
     Rails.cache.fetch(['budgets', user_id], expires_in: 10.minutes) do
       url = 'https://api.youneedabudget.com/v1/budgets'
       response = send_api_call(url, :get, nil, user_id, access_token)
@@ -15,7 +15,7 @@ class YnabAPI
     end
   end
 
-  def self.transactions(user_id, budget_id, account_id, access_token)
+  def self.get_transactions(user_id, budget_id, account_id, access_token)
     url = "https://api.youneedabudget.com/v1/budgets/#{budget_id}/accounts/#{account_id}/transactions?since_date=#{(Time.now - 3.weeks).strftime("%Y-%m-%d")}"
     response = send_api_call(url, :get, nil, user_id, access_token)
     JSON.parse(response.body)['data']['transactions']
