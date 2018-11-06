@@ -10,6 +10,20 @@ You can run the Ruby on Rails app locally or in the cloud.
 
 You can run the ynab sync service for free on Heroku. Choose a name for the application and which region you want to run it in. If you want to automate the sync process, for instance daily, you can use Heroku's scheduler to run the rake task.
 
+If you later want update the Heroku app to a newer version, you need to clone the repository and push it to Heroku.
+```
+# Repo setup
+$ git clone git@github.com:larsar/ynab-sync.git
+$ cd ynab-sync
+$ heroku git:remote -a <my_heroku_app_name>
+```
+```
+# Download latest version, deploy app and migrate database
+$ git pull origin master
+$ git push heroku master
+$ heroku run rake db:migrate
+```
+
 ## Run locally
 The easisest way is to run the application and the databases in Docker, using docker-compose. If you have some basic development tools installed, in addition to Docker, you should be able to start everything by running:
 ```$ make start```
