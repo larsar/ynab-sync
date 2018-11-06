@@ -2,7 +2,7 @@ class Cache
 
   API_RATE_LIMIT_YNAB_TOKEN = 'api-rate-limit-token-ynab'
   API_RATE_LIMIT_YNAB_TOKEN_EXP = "#{API_RATE_LIMIT_YNAB_TOKEN}_exp"
-  API_RATE_LIMIT_YNAB = ''
+  API_RATE_LIMIT_YNAB = 'api-rate-limit-ynab'
 
   def self.token(token_id, object_id, expires_in)
     t = Rails.cache.read([token_id, object_id])

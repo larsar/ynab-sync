@@ -57,13 +57,8 @@ class YnabAPI
     when :post
       response = http.post(path, data.to_json, headers)
     end
-
-    rate_counter = response.header['x-rate-limit'].split('/')[0]
-    if rate_counter == 1
-      Cache.token_reset(Cache::API_RATE_LIMIT_YNAB_TOKEN, user_id)
-    end
     api_rate_limit_token = Cache.token(Cache::API_RATE_LIMIT_YNAB_TOKEN, user_id, 60.minutes)
-    Rails.cache.write([Cache::API_RATE_LIMIT_YNAB, user_id, api_rate_limit_token], response.header['x-rate-limit'], expires_in: 60.minutes)
+    Rails.cache.increment([Cache::API_RATE_LIMIT_YNAB, user_id, api_rate_limit_token])
     response
   end
 

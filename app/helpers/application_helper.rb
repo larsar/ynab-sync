@@ -9,12 +9,12 @@ module ApplicationHelper
   end
 
   def ynab_rate_limit
-    default = '0/200'
+    default = '0'
     return '' unless current_user
     token = Rails.cache.read([Cache::API_RATE_LIMIT_YNAB_TOKEN, current_user.id])
     return default if token.blank?
-    limit = Rails.cache.read([Cache::API_RATE_LIMIT_YNAB, current_user.id, token])
-    return "#{limit || default} (#{ynab_rate_limit_until})"
+    limit = Rails.cache.fetch([Cache::API_RATE_LIMIT_YNAB, current_user.id, token], raw: true){0}
+    return "#{limit || default}/200 (#{ynab_rate_limit_until})"
   end
 
   def ynab_rate_limit_until
