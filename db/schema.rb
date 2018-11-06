@@ -53,13 +53,13 @@ ActiveRecord::Schema.define(version: 2018_11_05_231318) do
 
   create_table "items", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "type"
+    t.string "ext_id"
+    t.datetime "date"
+    t.float "amount"
     t.uuid "collection_id", null: false
     t.jsonb "properties"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.float "amount"
-    t.string "ext_id"
-    t.datetime "date"
     t.index ["collection_id"], name: "index_items_on_collection_id"
   end
 
@@ -78,6 +78,7 @@ ActiveRecord::Schema.define(version: 2018_11_05_231318) do
     t.string "ext_id"
     t.string "state"
     t.float "amount"
+    t.boolean "approved"
     t.datetime "date"
     t.jsonb "properties"
     t.uuid "account_id", null: false
