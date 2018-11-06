@@ -6,7 +6,8 @@
   "success_url": "/users/sign_up",
   "addons": ["heroku-postgresql:hobby-dev", "heroku-redis:hobby-dev", "scheduler:standard"],
   "env": {
-    "RAILS_ENV": "production"
+    "RAILS_ENV": "production",
+    "FORCE_TLS": "true"
   },
   "scripts": {
     "postdeploy": "bundle exec rake db:migrate"
