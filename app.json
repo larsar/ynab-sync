@@ -4,7 +4,7 @@
   "repository": "https://github.com/larsar/ynab-sync",
   "keywords": ["rails", "ynab"],
   "success_url": "/users/sign_up",
-  "addons": ["heroku-postgresql:hobby-dev"],
+  "addons": ["heroku-postgresql:hobby-dev", "heroku-redis:hobby-dev", "scheduler:standard"],
   "env": {
     "RAILS_ENV": "production"
   },
