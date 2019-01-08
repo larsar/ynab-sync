@@ -46,8 +46,8 @@ class SourcesController < ApplicationController
     @source =  Source.where(id: params[:id], user_id: current_user.id).first
 
     case @source
-    when YnabService
-      par = params[:ynab_service].permit(:name, :api_key)
+    when Sbanken
+      par = params[:sbanken].permit(:name, :nin, :client_id, :secret)
       @source.update_attributes(par)
       @source.save! if @source.valid?
     else
