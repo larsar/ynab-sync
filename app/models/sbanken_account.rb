@@ -6,7 +6,7 @@ class SbankenAccount < Collection
     synced_transaction_ids = []
 
     transactions_json.each do |transaction_hash|
-      next if transaction_hash['transactionId'] == '0'
+      next if transaction_hash['isReservation']
       transaction = SbankenTransaction.upsert(transaction_hash, self)
       synced_transaction_ids << transaction.id
     end

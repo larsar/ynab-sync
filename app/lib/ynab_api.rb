@@ -1,6 +1,6 @@
 class YnabAPI
   def self.get_accounts(user_id, budget_id, access_token)
-    Rails.cache.fetch(['accounts', 'YNAB', budget_id], expires_in: 10.minutes) do
+    Rails.cache.fetch(['accounts', 'YNAB', budget_id], expires_in: 1.second) do
       url = "https://api.youneedabudget.com/v1/budgets/#{budget_id}/accounts"
       response = send_api_call(url, :get, nil, user_id, access_token)
       JSON.parse(response.body)['data']['accounts']
@@ -8,7 +8,7 @@ class YnabAPI
   end
 
   def self.get_budgets(user_id, access_token)
-    Rails.cache.fetch(['budgets', user_id], expires_in: 10.minutes) do
+    Rails.cache.fetch(['budgets', user_id], expires_in: 1.second) do
       url = 'https://api.youneedabudget.com/v1/budgets'
       response = send_api_call(url, :get, nil, user_id, access_token)
       JSON.parse(response.body)['data']['budgets']
