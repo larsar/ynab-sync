@@ -7,7 +7,7 @@ class SbankenAPI
 
   def self.get_transactions(ext_account_id, access_token, source_id, nin)
     Rails.cache.fetch(['transaction', Sbanken.name, ext_account_id, source_id], expires_in: 1.second) do
-      SbankenAPI.http_get("https://api.sbanken.no/exec.bank/api/v1/Transactions/#{ext_account_id}?startDate=#{(Time.now - 2.weeks).strftime("%Y-%m-%d")}", access_token, nin)['items']
+      SbankenAPI.http_get("https://api.sbanken.no/exec.bank/api/v1/Transactions/#{ext_account_id}?startDate=#{(Time.now - 2.weeks).strftime("%Y-%m-%d")}&endDate=#{(Time.now - 1.week).strftime("%Y-%m-%d")}", access_token, nin)['items']
     end
   end
 
